@@ -96,6 +96,9 @@ var NormBits1Hit = uint64(1)
 
 // PostingsList is an in-memory representation of a postings list
 type PostingsList struct {
+	// atomic access to this variable
+	bytesRead      uint64
+
 	sb             *SegmentBase
 	postingsOffset uint64
 	freqOffset     uint64
@@ -109,9 +112,6 @@ type PostingsList struct {
 	normBits1Hit uint64
 
 	chunkSize uint64
-
-	// atomic access to this variable
-	bytesRead uint64
 }
 
 // represents an immutable, empty postings list
@@ -324,6 +324,9 @@ func (rv *PostingsList) init1Hit(fstVal uint64) error {
 
 // PostingsIterator provides a way to iterate through the postings list
 type PostingsIterator struct {
+	// atomic access to this variable
+	bytesRead uint64
+
 	postings *PostingsList
 	all      roaring.IntPeekable
 	Actual   roaring.IntPeekable
@@ -344,9 +347,6 @@ type PostingsIterator struct {
 
 	includeFreqNorm bool
 	includeLocs     bool
-
-	// atomic access to this variable
-	bytesRead uint64
 }
 
 var emptyPostingsIterator = &PostingsIterator{}

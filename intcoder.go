@@ -28,6 +28,9 @@ import (
 const termNotEncoded = 0
 
 type chunkedIntCoder struct {
+	// atomic access to this variable
+	bytesWritten uint64
+
 	final     []byte
 	chunkSize uint64
 	chunkBuf  bytes.Buffer
@@ -35,9 +38,6 @@ type chunkedIntCoder struct {
 	currChunk uint64
 
 	buf []byte
-
-	// atomic access to this variable
-	bytesWritten uint64
 }
 
 // newChunkedIntCoder returns a new chunk int coder which packs data into

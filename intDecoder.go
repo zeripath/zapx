@@ -21,15 +21,15 @@ import (
 )
 
 type chunkedIntDecoder struct {
+	// atomic access to this variable
+	bytesRead uint64
+
 	startOffset     uint64
 	dataStartOffset uint64
 	chunkOffsets    []uint64
 	curChunkBytes   []byte
 	data            []byte
 	r               *memUvarintReader
-
-	// atomic access to this variable
-	bytesRead uint64
 }
 
 // newChunkedIntDecoder expects an optional or reset chunkedIntDecoder for better reuse.

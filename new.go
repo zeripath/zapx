@@ -96,6 +96,9 @@ var interimPool = sync.Pool{New: func() interface{} { return &interim{} }}
 // interim holds temporary working data used while converting from
 // analysis results to a zap-encoded segment
 type interim struct {
+	// atomic access to this variable
+	bytesWritten uint64
+
 	results []index.Document
 
 	chunkMode uint32
@@ -146,9 +149,6 @@ type interim struct {
 
 	lastNumDocs int
 	lastOutSize int
-
-	// atomic access to this variable
-	bytesWritten uint64
 }
 
 func (s *interim) reset() (err error) {

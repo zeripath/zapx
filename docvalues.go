@@ -43,6 +43,9 @@ type docVisitState struct {
 }
 
 type docValueReader struct {
+	// atomic access to this variable
+	bytesRead      uint64
+
 	field          string
 	curChunkNum    uint64
 	chunkOffsets   []uint64
@@ -50,9 +53,6 @@ type docValueReader struct {
 	curChunkHeader []MetaData
 	curChunkData   []byte // compressed data cache
 	uncompressed   []byte // temp buf for snappy decompression
-
-	// atomic access to this variable
-	bytesRead uint64
 }
 
 func (di *docValueReader) size() int {
